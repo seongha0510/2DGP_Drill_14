@@ -39,8 +39,9 @@ class Zombie:
         self.arrow = Arrow()
         game_world.add_object(self.arrow, 2)
 
-        # 여기를 채우시오.
-
+        self.t = 0.0
+        self.sx, self.sy = self.x, self.y
+        self.distance = math.sqrt((self.arrow.x - self.x) ** 2 + (self.arrow.y - self.y) ** 2)
 
     def get_bb(self):
         return self.x - 50, self.y - 50, self.x + 50, self.y + 50
@@ -49,9 +50,17 @@ class Zombie:
     def update(self):
         self.frame = (self.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % FRAMES_PER_ACTION
 
-        # 여기를 채우시오.
-
-
+        if self.t < 1.0:
+            self.t += RUN_SPEED_PPS * game_framework.frame_time / self.distance
+            self.t += 0.01
+            self.x = self.sx * (1.0 - self.t) + (self.arrow.x * self.t)
+            self.y = self.sy * (1.0 - self.t) + (self.arrow.y * self.t)
+        else:
+            self.x, self.y = self.arrow.x, self.arrow.y
+            self.t = 0.0
+            self.arrow.reset_position()
+            self.sx, self.sy = self.x, self.y
+            self.distance = math.sqrt((self.arrow.x - self.x) ** 2 + (self.arrow.y - self.y) ** 2)
 
     def draw(self):
         if self.x > self.arrow.x:

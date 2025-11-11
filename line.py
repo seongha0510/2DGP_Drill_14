@@ -51,12 +51,24 @@ def draw_point(p):
 
 
 def draw_line(p1, p2):
-    # 여기를 채우시오.
+    draw_big_point(p1)
+    draw_big_point(p2)
+
+    x1, y1 = p1
+    x2, y2 = p2
+    #m(t) = (1-t)p1 + t p2, t: 0 to 1
+    for i in range(0, 100+1, 4):
+        t = i / 100
+        x = (1-t)*x1 + t*x2
+        y = (1-t)*y1 + t*y2
+        draw_point((x, y))
+
+    draw_point(p2)
     pass
 
 
 prepare_turtle_canvas()
 
-# 여기를 채우시오.
+draw_line((300, -100), (300, 150))
 
 turtle.done()
