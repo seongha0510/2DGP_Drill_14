@@ -1,5 +1,6 @@
 import turtle
 import random
+import math  # 삼각함수(cos, sin)를 사용하기 위해 math 모듈을 가져옵니다.
 
 
 def stop():
@@ -15,7 +16,7 @@ def prepare_turtle_canvas():
     turtle.shapesize(2)
     turtle.pensize(5)
     turtle.color(1, 0, 0)
-    turtle.speed(100)
+    turtle.speed(100)  # 축 그리는 속도
     turtle.goto(-500, 0)
     turtle.pendown()
     turtle.goto(480, 0)
@@ -32,7 +33,7 @@ def prepare_turtle_canvas():
     turtle.shape('circle')
     turtle.pensize(1)
     turtle.color(0, 0, 0)
-    turtle.speed(50)
+    turtle.speed(0)  # 도형 그리는 속도 (0이 가장 빠름)
 
     turtle.onkey(stop, 'Escape')
     turtle.listen()
@@ -42,7 +43,7 @@ def draw_big_point(p):
     turtle.goto(p)
     turtle.color(0.8, 0.9, 0)
     turtle.dot(15)
-    turtle.write('     '+str(p))
+    turtle.write('     ' + str(p))
 
 
 def draw_point(p):
@@ -50,25 +51,23 @@ def draw_point(p):
     turtle.dot(5, random.random(), random.random(), random.random())
 
 
-def draw_line(p1, p2):
-    draw_big_point(p1)
-    draw_big_point(p2)
+def draw_parametric_shape(k, scale, steps):
+    a = k
+    b = 1.0
+    t_end = 20 * math.pi
 
-    x1, y1 = p1
-    x2, y2 = p2
-    #m(t) = (1-t)p1 + t p2, t: 0 to 1
-    for i in range(0, 100+1, 4):
-        t = i / 100
-        x = (1-t)*x1 + t*x2
-        y = (1-t)*y1 + t*y2
-        draw_point((x, y))
+    print(f"Drawing shape for k={k}, scale={scale}, steps={steps}")
 
-    draw_point(p2)
-    pass
+    for i in range(0, steps + 1):
+        t = (i / steps) * t_end
 
+        x = (a - b) * math.cos(t) + b * math.cos(t * (a / b - 1))
+        y = (a - b) * math.sin(t) - b * math.sin(t * (a / b - 1))
+
+        draw_point((x * scale, y * scale))
 
 prepare_turtle_canvas()
 
-draw_line((300, -100), (300, 150))
+draw_parametric_shape(k=1.3, scale=50, steps=1000)
 
 turtle.done()
